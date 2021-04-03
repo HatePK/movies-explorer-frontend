@@ -1,0 +1,23 @@
+@import url(./Promo/Promo.css);
+@import url(./NavTab/NavTab.css);
+@import url(./AboutProject/AboutProject.css);
+@import url(./Techs/Techs.css);
+@import url(./Portfolio/Portfolio.css);
+
+.main__container {
+    max-width: 1280px;
+    margin: auto;
+}
+
+.main__section-header {
+    display: inline-block;
+    margin: 0;
+    padding-bottom: 23px;
+    border-bottom: 1px solid;
+    font-family: Inter, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 26.63px;
+    letter-spacing: -0.04em;
+}
