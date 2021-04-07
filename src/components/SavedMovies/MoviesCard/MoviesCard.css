@@ -1,0 +1,13 @@
+.saved-movie-unsave-icon {
+    opacity: 0;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 21px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.movie:hover .saved-movie-unsave-icon {
+    opacity: 1;
+}
