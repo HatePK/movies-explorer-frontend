@@ -1,8 +1,7 @@
-import movieImage from '../../../../images/movie-image.jpg'
 import MocieSuccessfullSavedIcon from '../../../../images/movie-successfull-saved-icon.svg'
 import React, { useState } from "react";
 
-function MoviesCard() {
+function MoviesCard({movie, onSave, savedMovies}) {
     const [movieSaved, setmovieSaved] = useState(false);
     const [saveButton, setSaveButton] = useState(true);
 
@@ -12,17 +11,36 @@ function MoviesCard() {
     function handleSave() {
         setmovieSaved(true);
         setSaveButton(false);
+        onSave(movie)
     }
+
+    function isMovieSaved (movie, savedMovies) {
+        if (savedMovies.find(savedMovie => savedMovie.movieId === movie.id)) {
+            return true;
+        }
+    }
+
+    function getTimeFromMins(mins) {
+        let hours = Math.trunc(mins/60);
+        let minutes = mins % 60;
+        return hours + 'ч ' + minutes + 'м';
+    };
+
+    const saveContainer = (
+        <div>
+            <button onClick={handleSave} className={saveButtonClass}>Сохранить</button>
+            <img className={movieSavedClass} alt="saved icon" src={MocieSuccessfullSavedIcon} />
+        </div>
+    )
 
     return (    
         <div className="movie">
-            <img className="movie__image" src={movieImage}/>
+            <img className="movie__image" alt={movie.nameRU} src={`https://api.nomoreparties.co${movie.image.url}`} />
             <div className="movie__about">
-                <p className="movie__about-name">33 слова о дизайне</p>
-                <p className="movie__about-duration">1ч 17м</p>
+                <p className="movie__about-name">{movie.nameRU}</p>
+                <p className="movie__about-duration">{getTimeFromMins(movie.duration)}</p>
             </div>
-            <button onClick={handleSave} className={saveButtonClass}>Сохранить</button>
-            <img className={movieSavedClass} alt="saved icon" src={MocieSuccessfullSavedIcon} />
+            {isMovieSaved(movie, savedMovies) ? <img className="movie__saved-icon" alt="saved icon" src={MocieSuccessfullSavedIcon} /> : saveContainer }
         </div>
     )
 }

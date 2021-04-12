@@ -1,17 +1,26 @@
 import React from "react";
-import movieImage from '../../../images/movie-image.jpg'
-import unSaveIcon from '../../../images/unsave-icon.svg'
+import MovieDeleteIcon from '../../../images/delete-movie-icon.svg'
 
+function MoviesCard({movie, onDelete, onSearchDelete}) {
+    function getTimeFromMins(mins) {
+        let hours = Math.trunc(mins/60);
+        let minutes = mins % 60;
+        return hours + 'ч ' + minutes + 'м';
+    };
 
-function MoviesCard() {
+    function handleDelete() {
+        onDelete(movie._id)
+        onSearchDelete(movie._id)
+    }
+
     return (    
         <div className="movie">
-            <img className="movie__image" src={movieImage} alt="movieimage" />
+            <img className="movie__image" alt={movie.nameRU} src={movie.image} />
             <div className="movie__about">
-                <p className="movie__about-name">33 слова о дизайне</p>
-                <p className="movie__about-duration">1ч 17м</p>
+                <p className="movie__about-name">{movie.nameRU}</p>
+                <p className="movie__about-duration">{getTimeFromMins(movie.duration)}</p>
             </div>
-            <img className="saved-movie-unsave-icon" src={unSaveIcon} alt="unsave icon" />
+            <button className="saved-movie-unsave-button" onClick={handleDelete}><img src={MovieDeleteIcon} alt="movie-delete-icon" /></button>
         </div>
     )
 }

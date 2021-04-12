@@ -1,36 +1,21 @@
 import React, { useState } from "react";
 import './Preloader.css'
 
-const Preloader = (hide) => {
-    const [preloader, setpreloader] = useState(false)
-    const [moreButton, setmoreButton] = useState(true)
-
-    function makePreloader() {
-        setpreloader(true);
-        setmoreButton(false);
-    }
-
-    function delPreloader() {
-        setpreloader(false);
-        setmoreButton(true);
-    }
+const Preloader = ({movies, preloaderAnimation, handleMoreClick, preloaderStatus}) => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        makePreloader();
-        setTimeout(delPreloader, 2000)
+        handleMoreClick();
     }
 
-    const moreButtonClass = (`movies__more-button ${moreButton ? '' : 'movies__more-button_type_unvisible'}`);
+    const preloaderClassName = (`preloader ${preloaderAnimation ? '' : 'preloader_type_unvisible'}`);
+    const moreTextClassName = (`movies__more_text ${preloaderAnimation ? 'movies__more_text_type_unvisible' : ''}`);
 
-    const preloaderClassName = 
-        (`preloader ${preloader ? '' : 'preloader_type_unvisible'}`
-    );
-    
-    console.log(hide.hide);
     return (
-        <div className="movies__more">
-            <button onClick={handleSubmit} className={moreButtonClass}>Ещё</button>
+        <div className='movies__more'>
+            <div className={moreTextClassName}>
+                {preloaderStatus === true ? <p className="movies__more-no-text">Ничего не найдено</p> : <button onClick={handleSubmit} className='movies__more-button'>Ещё</button>}
+            </div>
             <div className={preloaderClassName}>
                 <div className="preloader__container">
                     <span className="preloader__round"></span>
