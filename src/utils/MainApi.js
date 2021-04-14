@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://api.padchin.ru';
 const checkResponse = (response) => response.ok ? response.json() : Promise.reject(response.status);
 
 export const getMovies = (token) => {
