@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Redirect, Switch, useHistory } from "react-router-dom";
 import Header from "../Header/Header.js";
 import NotFound from "../NotFound/NotFound.js"
 import Footer from "../Footer/Footer.js"
@@ -11,15 +11,18 @@ import Register from "../Register/Register.js";
 import SavedMovies from "../SavedMovies/SavedMovies.js";
 import { register, authorisation, getCurrentUser, updateUser, createMovie, getMovies, deleteMovie } from "../../utils/MainApi";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 const jwt = localStorage.getItem('jwt')
 
 
 function App() {
     const history = useHistory();
     const [currentUser, setCurrentUser] = useState({})
-    const [userData, setUserData] = useState({email: '', name: ''})
     const [savedMovies, setSavedMovies] = useState([]);
-    const [errorMessageRegister, seterrorMessageRegister] = useState('');
+    const [Message, setMessage] = useState('');
+    const [StatusSuccess, seteditStatusSuccess] = useState(false);
+    const [StatusError, seteditStatusError] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false)
 
     useEffect(() => {
         if (jwt) {
@@ -31,8 +34,8 @@ function App() {
     const tokenCheck = (jwt) => {
         getCurrentUser(jwt)
             .then((res) => {
-                setUserData({email: res.email, name: res.name})
-                setCurrentUser(res);
+                setCurrentUser({email: res.email, name: res.name})
+                setLoggedIn(true);
         })
     }
 
@@ -46,12 +49,20 @@ function App() {
     const handleRegister = ({name, password, email}) => {
         return register(name, password, email)
         .then((res) => {
+            seteditStatusError(true);
+            setMessage('')
             if (res) {
                 handleLogin({password, email})
             } 
         })
-        .catch(() => {
-            seterrorMessageRegister('Ошибка на сервере')
+        .catch((err) => {
+            if (err === 409) {
+                setMessage('E-mail уже существует')
+                seteditStatusError(false);
+            } else {
+                setMessage('Ошибка на сервере')
+                seteditStatusError(false);
+            }
         })
     }
 
@@ -62,26 +73,47 @@ function App() {
                 throw new Error('Ошибка');
             };
             if (res.token) {
+                setMessage('')
+                seteditStatusError(true);
                 localStorage.setItem('jwt', res.token)
+                setLoggedIn(true);
+                getSavedMovies(res.token);
                 return getCurrentUser(res.token)
                     .then((res) => {
-                        setUserData({email: res.email, name: res.name})
-                        setCurrentUser(res);
+                        setCurrentUser({email: res.email, name: res.name})
                         history.push('/movies');
                     })
             }
+        }).catch((err) => {
+            if (err === 401) {
+                setMessage('Неверный логин или пароль')
+                seteditStatusError(false);
+            } else {
+                setMessage('Ошибка на сервере')
+                seteditStatusError(false);
+            }
         })
+        
     }
 
     const handleLogout = () => {
         localStorage.removeItem('jwt');
+        setLoggedIn(false)
         history.push('/');
     }
 
     const handleEditProfile = ({name, email}) => {
         return updateUser (email, name, jwt)
         .then((res) => {
-            setUserData({email: res.email, name: res.name})
+            setCurrentUser({email: res.email, name: res.name})
+            setMessage('Данные изменены')
+            seteditStatusError(true);
+            seteditStatusSuccess(false);
+        })
+        .catch(() => {
+            setMessage('Ошибка на сервере')
+            seteditStatusError(false);
+            seteditStatusSuccess(true);
         })
     }
 
@@ -115,25 +147,47 @@ function App() {
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
-            <Header />
+            <Header loggedIn={loggedIn}/>
             <Switch>
                 <Route exact path="/" component={Main} />
-                <Route path="/movies">
-                    <Movies onSave={handleSaveMovie} savedMovies={savedMovies} />
-                </Route> 
-                <Route path="/saved-movies">
-                    <SavedMovies savedMovies={savedMovies} onDelete={handleDeleteMovie} />
-                </Route>
-                <Route path="/profile">
-                    <Profile userInfo={userData} onSubmit={handleEditProfile} onLogout={handleLogout} />
-                </Route>
+                <ProtectedRoute path="/movies" 
+                    component={Movies}
+                    onSave={handleSaveMovie} 
+                    savedMovies={savedMovies} 
+                />
+                <ProtectedRoute path="/saved-movies" 
+                    component={SavedMovies}
+                    savedMovies={savedMovies}
+                    onDelete={handleDeleteMovie}
+                />
+                <ProtectedRoute path="/profile" 
+                    component={Profile}
+                    onSubmit={handleEditProfile} 
+                    onLogout={handleLogout} 
+                    message={Message} 
+                    statusSuccess={StatusSuccess}
+                    statusError={StatusError}
+                />
                 <Route path="/signin">
-                    <Login onLogin={handleLogin} />
+                    <Login 
+                        onLogin={handleLogin}
+                        message={Message} 
+                        statusError={StatusError}
+                    />
                 </Route>
                 <Route path="/signup">
-                    <Register onRegister={handleRegister} errorMessage={errorMessageRegister} />
+                    <Register 
+                        onRegister={handleRegister} 
+                        message={Message} 
+                        statusError={StatusError}
+                    />
                 </Route>
-                <Route path="/not-found" component={NotFound} />
+                <Route path="/not-found">
+                    <NotFound back={history.goBack} />
+                </Route>
+                <Route>
+                    <Redirect to="/not-found" />
+                </Route>
             </Switch>
             <Footer />
         </CurrentUserContext.Provider>

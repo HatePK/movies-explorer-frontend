@@ -1,9 +1,10 @@
-function NotFound() {
+function NotFound({back}) {
+    console.log(back)
     return(
         <div className="error">
             <p className="error__name">404</p>
             <p className="error__comment">Страница не найдена</p>
-            <a href="/" className="error__navlink">Назад</a>
+            <button onClick={back} className="error__navlink">Назад</button>
         </div>
     )
 }

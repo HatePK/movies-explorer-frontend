@@ -7,12 +7,12 @@ function MoviesCardList({checkbox, movies, number, onSave, savedMovies, changeLe
                 const newArray = cards.filter((movie) => movie.duration < 40).slice(0, number)
                 changeLength(0)
                 return newArray.map((movie) => {
-                    return <MoviesCard onSave={onSave} movie={movie} savedMovies={savedMovies} />
+                    return <MoviesCard key={movie.nameEN} onSave={onSave} movie={movie} savedMovies={savedMovies} />
                 })
             } else {
                 const newArray = cards.slice(0, number)
                 return newArray.map((movie) => {
-                    return <MoviesCard onSave={onSave} movie={movie} savedMovies={savedMovies} />
+                    return <MoviesCard key={movie.nameEN} onSave={onSave} movie={movie} savedMovies={savedMovies} />
                 })
             }   
         }

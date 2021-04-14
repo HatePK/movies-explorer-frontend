@@ -18,9 +18,8 @@ export function FormValidation () {
     return {values, errors, isValid, handleChange};
 }
 
-function Login({onLogin}) {
+function Login({onLogin, message, statusError}) {
     const {handleChange, values, errors, isValid} = FormValidation();
-    const [validSubmit, setValidSubmit] = useState(true);
     const [submitDisabled, setSubmitDisabled] = useState(true);
 
     const handleSubmit = (e) => {
@@ -39,8 +38,15 @@ function Login({onLogin}) {
         }
     }, [isValid]);
 
+    function infoMessage (statusError) {
+        if (!statusError) {
+            return 'auth__info-message_type_error'
+        } else {
+            return '';
+        }
+    }
+
     const submitClass = `auth__button ${submitDisabled ? "auth__button_type_unavailable" : ""}`
-    const errMessageClass = `auth__button-err-message ${validSubmit ? "auth__button-err-message_type_hide" : ""}`;
 
     return(
         <div className="auth">
@@ -48,7 +54,7 @@ function Login({onLogin}) {
             <h1 className="auth__header">Рады видеть!</h1>
             <form onSubmit={handleSubmit} noValidate className="auth__form">
                 <div className="auth__field">
-                    <label className="auth__label" for="email">E-mail</label>
+                    <label className="auth__label" htmlFor="email">E-mail</label>
                     <input 
                         name="email" 
                         onChange={handleChange} 
@@ -60,20 +66,20 @@ function Login({onLogin}) {
                     <p className="auth__error-message">{errors.email !== '' && errors.email}</p>
                 </div>
                 <div className="auth__field">
-                    <label className="auth__label" for="password">Пароль</label>
+                    <label className="auth__label" htmlFor="password">Пароль</label>
                     <input 
                         name="password" 
                         onChange={handleChange} 
                         className={`auth__input ${errors.password ? 'auth__input_type_error': ''}`} 
                         type="password" 
-                        minlength="2" 
+                        minLength="2" 
                         required 
                         id="password" 
                     />
                     <p className="auth__error-message">{errors.password !== '' && errors.password}</p>
                 </div>
                 <div className="auth__submit-area">
-                    <p className={errMessageClass}>При регистрации произошла ошибка</p>
+                    <p className={`auth__info-message ${infoMessage(statusError)}`}>{message}</p>
                     <button disabled={submitDisabled} className={submitClass}>Войти</button>
                 </div>
             </form>

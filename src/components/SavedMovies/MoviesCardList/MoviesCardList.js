@@ -5,11 +5,11 @@ function MoviesCardList({movies, searchMovies, searchStatus, onDelete, onSearchD
     function renderCards(cards) {
         if (checkbox) {
             return cards.filter((movie) => movie.duration < 40).map((movie) => {
-                return <MoviesCard movie={movie} onDelete={onDelete} onSearchDelete={onSearchDelete} />
+                return <MoviesCard key={movie.nameEN} movie={movie} onDelete={onDelete} onSearchDelete={onSearchDelete} />
             })
         } else {
             return cards.map((movie) => {
-                return <MoviesCard movie={movie} onDelete={onDelete} onSearchDelete={onSearchDelete} />
+                return <MoviesCard key={movie.nameEN} movie={movie} onDelete={onDelete} onSearchDelete={onSearchDelete} />
             })
         }
     }

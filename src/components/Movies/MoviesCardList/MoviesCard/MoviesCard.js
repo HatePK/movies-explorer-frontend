@@ -21,8 +21,8 @@ function MoviesCard({movie, onSave, savedMovies}) {
     }
 
     function getTimeFromMins(mins) {
-        let hours = Math.trunc(mins/60);
-        let minutes = mins % 60;
+        const hours = Math.trunc(mins/60);
+        const minutes = mins % 60;
         return hours + 'ч ' + minutes + 'м';
     };
 
@@ -32,16 +32,15 @@ function MoviesCard({movie, onSave, savedMovies}) {
             <img className={movieSavedClass} alt="saved icon" src={MocieSuccessfullSavedIcon} />
         </div>
     )
-
     return (    
-        <div className="movie">
+        <li className="movie">
             <img className="movie__image" alt={movie.nameRU} src={`https://api.nomoreparties.co${movie.image.url}`} />
             <div className="movie__about">
                 <p className="movie__about-name">{movie.nameRU}</p>
                 <p className="movie__about-duration">{getTimeFromMins(movie.duration)}</p>
             </div>
             {isMovieSaved(movie, savedMovies) ? <img className="movie__saved-icon" alt="saved icon" src={MocieSuccessfullSavedIcon} /> : saveContainer }
-        </div>
+        </li>
     )
 }
 

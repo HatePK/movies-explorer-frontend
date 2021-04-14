@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import closePopupIcon from "../../../images/close-popup-icon.svg"
 
 function NavigationPopup({isOpen, onClose}) {
-    console.log(isOpen);
     const popupClassName = `popup ${isOpen ? "" : "popup_type_hide"}`
     return (
         <div className={popupClassName}>

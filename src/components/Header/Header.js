@@ -1,40 +1,17 @@
-import logo from '../../images/logo.svg';
 import { Route, Switch } from "react-router-dom";
 import Navigation from "../Navigation/Navigation.js"
 
-function Header() {
+function Header({loggedIn}) {
     return (    
         <Switch>
             <Route exact path="/">
                 <header className="header header_type_color">
-                    <div className="header__container">
-                        <a className="header__main-link" href="/"><img className="header__logo" src={logo} alt="Movies explorer"/></a>
-                        <Navigation />
-                    </div>
+                        <Navigation loggedIn={loggedIn}/>
                 </header>
             </Route>
-            <Route exact path="/movies">
+            <Route exact path="/(profile|movies|saved-movies)/">
                 <header className="header">
-                    <div className="header__container">
-                        <a href="/"><img className="header__logo" src={logo} alt="Movies explorer"/></a>
-                        <Navigation />
-                    </div>
-                </header>
-            </Route>
-            <Route path="/saved-movies">
-                <header className="header">
-                    <div className="header__container">
-                        <a href="/"><img className="header__logo" src={logo} alt="Movies explorer"/></a>
-                        <Navigation />
-                    </div>
-                </header>
-            </Route>
-            <Route path="/profile">
-                <header className="header">
-                    <div className="header__container">
-                        <a href="/"><img className="header__logo" src={logo} alt="Movies explorer"/></a>
-                        <Navigation />
-                    </div>
+                        <Navigation loggedIn={loggedIn}/>
                 </header>
             </Route>
         </Switch>

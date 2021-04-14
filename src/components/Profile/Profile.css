@@ -111,6 +111,28 @@
     line-height: 13.31px;
 }
 
+.auth__info-message {
+    display: none;
+    margin: 0 auto 20px;
+    text-align: center;
+    font-family: Inter, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13.31px;
+}
+
+.auth__info-message_type_error {
+    display: block;
+    color: #FF004C;
+}
+
+
+.auth__info-message_type_success {
+    display: block;
+    color: #00860b;
+}
+
 @media screen and (max-width: 768px) {
 
     .profile__info {

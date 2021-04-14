@@ -18,9 +18,8 @@ export function FormValidation () {
     return {values, errors, isValid, handleChange};
 }
 
-function Register({onRegister, errorMessage}) {
+function Register({onRegister, message, statusError}) {
     const {handleChange, values, errors, isValid} = FormValidation();
-    const [validForm, setvalidForm] = useState(true);
     const [submitDisabled, setSubmitDisabled] = useState(true);
 
     const handleSubmit = (e) => {
@@ -41,7 +40,14 @@ function Register({onRegister, errorMessage}) {
     }, [isValid]);
 
     const submitClass = `auth__button ${submitDisabled ? "auth__button_type_unavailable" : ""}`
-    const errMessageClass = `auth__button-err-message ${validForm ? "auth__button-err-message_type_hide" : ""}`;
+
+    function infoMessage (statusError) {
+        if (!statusError) {
+            return 'auth__info-message_type_error'
+        } else {
+            return '';
+        }
+    }
 
     return(
         <div className="auth">
@@ -49,19 +55,19 @@ function Register({onRegister, errorMessage}) {
             <h1 className="auth__header">Добро пожаловать!</h1>
             <form onSubmit={handleSubmit} noValidate className="auth__form">
                 <div className="auth__field">
-                    <label className="auth__label" for="name">Имя</label>
+                    <label className="auth__label" htmlFor="name">Имя</label>
                     <input 
                         className={`auth__input ${errors.name ? 'auth__input_type_error' : ''}`} 
                         name="name" 
                         onChange={handleChange} 
                         type="text" 
-                        minlength="2" 
+                        minLength="2" 
                         required id="name" 
                     />
                     <p className="auth__error-message">{errors.name !== '' && errors.name}</p>
                 </div>
                 <div className="auth__field">
-                    <label className="auth__label" for="email">E-mail</label>
+                    <label className="auth__label" htmlFor="email">E-mail</label>
                     <input 
                         className={`auth__input ${errors.email ? 'auth__input_type_error' : ''}`} 
                         name="email" type="email" 
@@ -71,18 +77,19 @@ function Register({onRegister, errorMessage}) {
                     <p className="auth__error-message">{errors.email !== '' && errors.email}</p>
                 </div>
                 <div className="auth__field">
-                    <label className="auth__label" for="password">Пароль</label>
+                    <label className="auth__label" htmlFor="password">Пароль</label>
                     <input 
                         className={`auth__input ${errors.password ? 'auth__input_type_error' : ''}`} 
                         name="password" 
                         onChange={handleChange} 
-                        type="password" minlength="2" 
+                        type="password" 
+                        minLength="2" 
                         required id="password" 
                     />
                     <p className="auth__error-message">{errors.password !== '' && errors.password}</p>
                 </div>
                 <div className="auth__submit-area">
-                    <p className={errMessageClass}>{errorMessage}</p>
+                    <p className={`auth__info-message ${infoMessage(statusError)}`}>{message}</p>
                     <button type="submit" disabled={submitDisabled} className={submitClass}>Зарегистрироваться</button>
                 </div>
             </form>

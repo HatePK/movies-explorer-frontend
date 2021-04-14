@@ -25,12 +25,17 @@
 
 .error__navlink {
     display: block;
+    border: none; 
+    outline: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
     font-family: Inter, Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 16.94px;
-    margin: 184px 0 0;
+    margin: 184px auto 0;
     text-decoration: none;
     color: #3456F3;
 }
