@@ -1,8 +1,15 @@
+import React, { useRef } from "react";
 import FilterCheckbox from "./FilterCheckbox/FilterCheckbox.js"
 import searchIcon from '../../../images/search-icon.svg';
-import decorationLine from '../../../images/search-decor-line.svg';
 
-function SearchForm() {
+
+function SearchForm({onSearchClick, changeCbx}) {
+    const searchInput = useRef();
+    function handleSearchClick(e) {
+        e.preventDefault();
+        onSearchClick(searchInput.current.value);
+    }
+
     return (    
         <form className="search">
             <div className="search__container">
@@ -11,13 +18,14 @@ function SearchForm() {
                         type="text" 
                         className="search__input" 
                         name="search-input"
-                        placeholder="Фильм">
-                    </input>
-                    <button className="search__button">
+                        placeholder="Фильм"
+                        ref={searchInput} 
+                    />
+                    <button className="search__button" onClick={handleSearchClick}>
                         <img className="search__icon" src={searchIcon} alt="Search"/>
                     </button>
                 </div>
-                <FilterCheckbox />
+                <FilterCheckbox changeCbx={changeCbx}/>
             </div>
         </form>
     )

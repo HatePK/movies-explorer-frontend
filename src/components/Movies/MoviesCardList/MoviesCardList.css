@@ -38,6 +38,33 @@
     display: none;
 }
 
+.movies__more_text_type_unvisible {
+    display: none;
+}
+
+.movies__more_type_unvisible {
+    display: none;
+}
+
+.movies__more-no-text {
+    text-align: center;
+    font-family: Inter, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 14.52px;
+    padding: 0;
+    color: grey;
+}
+
+.movies__more-no-text_type_saved-movies {
+    margin-top: 66px;
+}
+
+.movies__empty-container {
+    height: 30vh;
+}
+
 @media screen and (max-width: 768px) {
     .movies__list {
         padding: 70px 0 12px;

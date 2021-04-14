@@ -1,5 +1,5 @@
 import logo from '../../images/logo.svg';
-import {useState, useCallback} from 'react';
+import {useState, useEffect} from 'react';
 
 export function FormValidation () {
     const [values, setValues] = useState({});
@@ -15,30 +15,38 @@ export function FormValidation () {
         setIsValid(target.closest("form").checkValidity());
     }
 
-    const resetForm = useCallback (
-        (newValues = {}, newErrors = {}, newIsValid = false) => {
-            setValues(newValues);
-            setErrors(newErrors);
-            setIsValid(newIsValid);
-        },
-        [setValues, setErrors, setIsValid]
-    );
-
-    return {values, handleChange, errors, isValid, resetForm};
+    return {values, errors, isValid, handleChange};
 }
 
-function Login() {
-    const {handleChange, errors, isValid} = FormValidation();
-    const [validSubmit, setValidSubmit] = useState(true);
-    const [submitDisabled, setSubmitDisabled] = useState(false);
+function Login({onLogin, message, statusError}) {
+    const {handleChange, values, errors, isValid} = FormValidation();
+    const [submitDisabled, setSubmitDisabled] = useState(true);
+
     const handleSubmit = (e) => {
             e.preventDefault();
-            setValidSubmit(false);
-            setSubmitDisabled(true);
+            onLogin({
+                email: values.email,
+                password: values.password
+            });
     };
 
-    const submitClass = `auth__button ${isValid ? "": "auth__button_type_unavailable"} ${validSubmit ? "": "auth__button_type_unavailable"}`
-    const errMessageClass = `auth__button-err-message ${validSubmit ? "auth__button-err-message_type_hide" : ""}`;
+    useEffect(() => {
+        if (isValid === true) {
+            setSubmitDisabled(false)
+        } else {
+            setSubmitDisabled(true)
+        }
+    }, [isValid]);
+
+    function infoMessage (statusError) {
+        if (!statusError) {
+            return 'auth__info-message_type_error'
+        } else {
+            return '';
+        }
+    }
+
+    const submitClass = `auth__button ${submitDisabled ? "auth__button_type_unavailable" : ""}`
 
     return(
         <div className="auth">
@@ -46,17 +54,32 @@ function Login() {
             <h1 className="auth__header">Рады видеть!</h1>
             <form onSubmit={handleSubmit} noValidate className="auth__form">
                 <div className="auth__field">
-                    <label className="auth__label" for="email">E-mail</label>
-                    <input name="email" onChange={handleChange} className={`auth__input ${errors.email !== '' && 'auth__input_type_error'}`} type="email" required id="email" />
+                    <label className="auth__label" htmlFor="email">E-mail</label>
+                    <input 
+                        name="email" 
+                        onChange={handleChange} 
+                        className={`auth__input ${errors.email ? 'auth__input_type_error': ''}`} 
+                        type="email" 
+                        required 
+                        id="email" 
+                    />
                     <p className="auth__error-message">{errors.email !== '' && errors.email}</p>
                 </div>
                 <div className="auth__field">
-                    <label className="auth__label" for="password">Пароль</label>
-                    <input name="password" onChange={handleChange} className={`auth__input ${errors.password !== '' && 'auth__input_type_error'}`} type="password" minlength="2" required id="password" />
+                    <label className="auth__label" htmlFor="password">Пароль</label>
+                    <input 
+                        name="password" 
+                        onChange={handleChange} 
+                        className={`auth__input ${errors.password ? 'auth__input_type_error': ''}`} 
+                        type="password" 
+                        minLength="2" 
+                        required 
+                        id="password" 
+                    />
                     <p className="auth__error-message">{errors.password !== '' && errors.password}</p>
                 </div>
                 <div className="auth__submit-area">
-                    <p className={errMessageClass}>При регистрации произошла ошибка</p>
+                    <p className={`auth__info-message ${infoMessage(statusError)}`}>{message}</p>
                     <button disabled={submitDisabled} className={submitClass}>Войти</button>
                 </div>
             </form>

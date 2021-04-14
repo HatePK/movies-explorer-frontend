@@ -1,4 +1,4 @@
-.saved-movie-unsave-icon {
+.saved-movie-unsave-button {
     opacity: 0;
     position: absolute;
     top: 14px;
@@ -6,8 +6,18 @@
     width: 21px;
     height: 21px;
     cursor: pointer;
+    border: none;
+    outline: none;
+    padding: 0;
+    border-radius: 30px;
 }
 
-.movie:hover .saved-movie-unsave-icon {
+.movie:hover .saved-movie-unsave-button {
     opacity: 1;
+    transition: 0.3s;
+}
+
+.movie:hover .movie__saved-icon_type_hover{
+    opacity: 0;
+    transition: 0.3s;
 }

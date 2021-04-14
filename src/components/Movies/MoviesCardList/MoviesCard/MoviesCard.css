@@ -5,6 +5,12 @@
     width: 360px;
 }
 
+.movie__image {
+    width: 360px;
+    height: 201px;
+    object-fit: cover;
+}
+
 .movie__save {
     opacity: 0;
     position: absolute;
@@ -40,6 +46,7 @@
 }
 
 .movie__about {
+    position: relative;
     width: 100%;
     max-width: 332px;
     display: flex;
@@ -52,6 +59,7 @@
 }
 
 .movie__about-name {
+    max-width: 80%;
     margin: 0;
     font-family: Inter, Arial, sans-serif;
     font-style: normal;
@@ -61,6 +69,9 @@
 }
 
 .movie__about-duration {
+    position: absolute;
+    top: 0;
+    right: 0;
     margin: 0 0 0 34px;
     padding: 3px 4px;
     width: 44px;
@@ -79,10 +90,18 @@
     .movie {
         width: 339px;
     }
+    
+    .movie__image {
+        width: 339px;
+    }
 }
 
 @media screen and (max-width: 500px) {
     .movie {
+        width: 300px;
+    }
+
+    .movie__image {
         width: 300px;
     }
 
